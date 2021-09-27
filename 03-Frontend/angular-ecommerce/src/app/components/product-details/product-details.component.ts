@@ -1,6 +1,9 @@
+import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CartItem } from 'src/app/common/cart-item';
 import { Product } from 'src/app/common/product';
+import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -13,7 +16,9 @@ export class ProductDetailsComponent implements OnInit {
   product: Product = new Product();
 
   constructor(private productService: ProductService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private cartService: CartService
+              ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(() => {
@@ -28,6 +33,12 @@ export class ProductDetailsComponent implements OnInit {
         this.product = data;
       }
     )
+  }
+
+  addToCart() {
+    console.log("adding to cart " + this.product.name + " " + this.product.unitPrice);
+    const theCartItem = new CartItem(this.product);
+    this.cartService.addToCart(theCartItem);
   }
 
 }
